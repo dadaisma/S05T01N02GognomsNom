@@ -2,11 +2,12 @@ package cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom
 
 import cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom.model.dto.FlowerDTO;
 import cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom.model.services.FlowerServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/flower")
@@ -15,52 +16,44 @@ public class FlowerController {
     @Autowired
     private FlowerServiceImpl flowerServiceImpl;
 
-
-    @GetMapping({"/", "/getAll"})
-    public  String homePage(Model model) {
-        model.addAttribute("flowers", flowerServiceImpl.getAllFlowers());
-        return "/home";
+    @GetMapping("/getAll")
+    public ResponseEntity<List<FlowerDTO>> getAllFlowersNow(){
+        return ResponseEntity.ok().body(flowerServiceImpl.getAllFlowers());
     }
 
-    @GetMapping({"/add"})
-    public String showAddForm(Model model) {
-        model.addAttribute("flower", new FlowerDTO());
-        return "add";
+
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<?> getOneFlower(@PathVariable("id") Integer flowerId){
+        return ResponseEntity.ok().body(flowerServiceImpl.getFlowerById(flowerId));
     }
 
-    @PostMapping({"/add"})
-    public String createFlowerAdd(@ModelAttribute("flower") FlowerDTO flowerDTO) {
-        flowerServiceImpl.createFlower(flowerDTO);
-        return "redirect:/flower/";
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addFlower(@RequestBody FlowerDTO flowerDTO){
+       flowerServiceImpl.createFlower(flowerDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(flowerDTO);
+
     }
 
-    @GetMapping({ "/getOne/{id}"})
-    public String showEditForm(@PathVariable(value="id") Integer id, Model model) {
-        model.addAttribute("flower", flowerServiceImpl.getFlowerById(id));
-        return "edit";
-    }
+    @PutMapping( "/update/{id}")
+    public ResponseEntity<?>  updateFlowerEdit(@PathVariable("id") Integer id,@RequestBody FlowerDTO flowerDTO)  {
 
-    @PostMapping({ "/update/{id}"})
-
-    public String updateFlowerEdit(@PathVariable("id") Integer id, @ModelAttribute("flower") FlowerDTO flowerDTO, Model model) {
-        try {
             flowerDTO.setPkFlowerID(id); // Set the ID from path variable
             flowerServiceImpl.updateFlower(flowerDTO); // Update the FlowerDTO
-            return "redirect:/flower/"; // Redirect on success
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "edit"; // Return to edit page with error message
-        }
+            return ResponseEntity.ok().body(flowerDTO);
+
     }
 
-    @PostMapping({"/delete/{id}"})
-    public String deleteFlowerForm(@PathVariable(value="id") Integer id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteFlowerNow(@PathVariable(value="id") Integer id){
         flowerServiceImpl.deleteFlower(id);
-        return "redirect:/flower/";
-    }
+        return ResponseEntity.noContent().build();
 
+        }
 
 }
+
 
 
 

@@ -65,14 +65,14 @@ public class FlowerServiceImpl implements Iflower {
 
     @Override
     @Transactional
-    public boolean deleteFlower(Integer flowerId) {
+    public void deleteFlower(Integer flowerId) {
         if(!iFlowerRepository.findById(flowerId).isPresent()){
             throw new EntityNotFoundException("Update Flower Failed: Invalid ID: "+ flowerId+
                     " -> DOESN'T EXIST in DataBase");
         }
-
         iFlowerRepository.deleteById(flowerId);
-        return true;}
+        }
+
     @Override
     @Transactional(readOnly = true)
     public FlowerDTO getFlowerById(Integer flowerId) {

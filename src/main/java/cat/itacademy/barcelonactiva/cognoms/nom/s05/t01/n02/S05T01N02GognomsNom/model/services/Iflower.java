@@ -13,7 +13,7 @@ public interface Iflower {
     @Transactional
     void updateFlower(FlowerDTO flowerDTO);
 
-    boolean deleteFlower(Integer id);
+    void deleteFlower(Integer id);
 
     FlowerDTO getFlowerById(Integer id);
 
