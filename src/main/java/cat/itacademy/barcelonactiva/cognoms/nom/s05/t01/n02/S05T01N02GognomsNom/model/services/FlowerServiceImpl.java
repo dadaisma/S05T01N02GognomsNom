@@ -2,6 +2,7 @@ package cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom
 
 import cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom.model.domain.Flower;
 import cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom.model.dto.FlowerDTO;
+import cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom.model.exceptiones.InvalidFlowerDataException;
 import cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom.model.repository.IflowerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
@@ -40,7 +41,9 @@ public class FlowerServiceImpl implements Iflower {
 
     @Override
     public void createFlower(FlowerDTO flowerDTO) {
-
+        if (flowerDTO.getNameFlower() == null || flowerDTO.getCountryFlower() == null) {
+            throw new InvalidFlowerDataException("Name and country cannot be null");
+        }
         iFlowerRepository.save(toEntity(flowerDTO));
     }
 
