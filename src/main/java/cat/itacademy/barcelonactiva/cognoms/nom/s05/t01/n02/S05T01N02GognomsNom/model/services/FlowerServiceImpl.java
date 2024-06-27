@@ -77,7 +77,9 @@ public class FlowerServiceImpl implements Iflower {
     @Transactional(readOnly = true)
     public FlowerDTO getFlowerById(Integer flowerId) {
         Flower flower = iFlowerRepository.findById(flowerId)
-                .orElseThrow(() -> new NoResultException("Get One Flower Failed: Invalid ID: "+ flowerId
+                .orElseThrow(() -> new NoResultException(
+                        "Get One Flower Failed: Invalid ID: "
+                                + flowerId
                         +" -> DOESN'T EXIST in DataBase"));
 
         return toDTO(flower);

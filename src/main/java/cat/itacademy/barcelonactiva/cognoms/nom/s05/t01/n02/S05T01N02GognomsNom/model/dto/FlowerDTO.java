@@ -1,11 +1,16 @@
 package cat.itacademy.barcelonactiva.cognoms.nom.s05.t01.n02.S05T01N02GognomsNom.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class FlowerDTO {
     private Integer pkFlowerID;
+    @NotNull
     private String nameFlower;
+    @NotNull
     private String countryFlower;
     private String typeFlower;
 
